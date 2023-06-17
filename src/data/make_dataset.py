@@ -135,6 +135,13 @@ def filter_df_by_target_cond(df: pd.DataFrame, name):
     return filtered_data
 
 
+def get_comp_5_in_city(data):
+    math_pop = data.pivot_table(index='city_code', columns='yehidot_computers', values='mispar_ishi', aggfunc='count').fillna(0)
+    math_pop['comp_5_ration'] = ((math_pop[5] + math_pop[10]) / math_pop.sum(axis=1)).fillna(0)
+    data = data.merge(math_pop[['comp_5_ration']], how='left', left_on='city_code', right_index=True)
+    return data
+
+
 def get_math_5_in_city(data):
     math_pop = data.pivot_table(index='city_code', columns='yehidot_math', values='mispar_ishi', aggfunc='count').fillna(0)
     math_pop['math_5_ration'] = ((math_pop[5] + math_pop[10]) / math_pop.sum(axis=1)).fillna(0)
@@ -192,6 +199,10 @@ def load_data(path):
     # adding get_math_5_in_city
     df_merged = get_math_5_in_city(df_merged)
     print(f'df_merged.columns: {df_merged.columns.to_list()}')
+    # adding get_comp_5_in_city
+    df_merged = get_comp_5_in_city(df_merged)
+    print(f'df_merged.columns: {df_merged.columns.to_list()}')
+
     return df_merged
 
 

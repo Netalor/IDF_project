@@ -30,14 +30,14 @@ def run_classification(X_train, X_test, y_train, y_test):
         correlation_selection = pipeline.named_steps['correlation_selection']
         transformed_x = correlation_selection.transform(transformed_x)
         transformed_x = pd.DataFrame(transformed_x, columns=feature_names)
-        shap_plot(model, transformed_x)
+        shap_plot(model, transformed_x, name='all')
 
 
         transformed_x = preprocessor.transform(X_test[(y_test == 1) & (y_pred_proba[:, 1] < 0.5) ])
         correlation_selection = pipeline.named_steps['correlation_selection']
         transformed_x = correlation_selection.transform(transformed_x)
         transformed_x = pd.DataFrame(transformed_x, columns=feature_names)
-        shap_plot(model, transformed_x)
+        shap_plot(model, transformed_x, name='cond')
     return pipeline
 
 
@@ -111,7 +111,7 @@ def run(path):
               df_for_matching[df_for_matching[target_feature] == 1]['propensity_score'], 'propensity_score overall')
     # matching
     df_balanced = create_matched_df(df_for_matching)
-    create_model_plots(df_balanced, ['propensity_score'], desc='')
+    # create_model_plots(df_balanced, ['propensity_score'], desc='')
 
     with_treatment_matched = df_balanced[df_balanced[target_feature] == 1]
     without_treatment_matched = df_balanced[df_balanced[target_feature] == 0]
@@ -124,7 +124,7 @@ def run(path):
     summary_cat_df = categorical_summary(categorical_features, with_treatment_matched, without_treatment_matched)
     summary_cat_df.to_csv(f'output/{folder_name}/matched_summary/summary_cat_df.csv')
     # print(summary_cat_df)
-    for col in X.columns:
+    for col in with_treatment_matched.columns:
             # print(f'plot column: {col}')
             plot_hist(without_treatment_matched[col], with_treatment_matched[col], f'matched_{col}')
 

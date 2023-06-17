@@ -107,8 +107,10 @@ def plot_smd(smd_scores, cols=["smd_global", "smd"], diff_name='smd'):
         fig.show()
 
 
-def shap_plot(clf, x):
+def shap_plot(clf, x, name):
+    import matplotlib.pyplot as plt
 
     shap.initjs()
     explainer = shap.TreeExplainer(clf)
-    shap.summary_plot(explainer.shap_values(x), x)
+    shap.summary_plot(explainer.shap_values(x), x, show=False)
+    plt.savefig(f"output/{folder_name}/model/shap_summary_{name}.png")
