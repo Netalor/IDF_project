@@ -1,5 +1,7 @@
 import pandas as pd
 
+from confs.conf import logger
+
 
 def show_nulls(df):
     null_columns = df.columns#[df.isnull().any()]
@@ -12,7 +14,7 @@ def show_nulls(df):
     null_result.columns = ['Null Count', 'Null Ratio']
     null_result = null_result.sort_values(by='Null Count', ascending=False)
 
-    print("Columns with null values and their corresponding ratios:")
+    logger.info("Columns with null values and their corresponding ratios:")
     return null_result
 
 

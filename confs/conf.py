@@ -1,3 +1,4 @@
+import logging
 categorical_features = ['napa_code']
 
 numerical_features = ['bmi', 'height', 'weight', 'profil',
@@ -25,3 +26,13 @@ show_plot = False
 include_bagrut = True
 include_likui = True
 algo_name = 'xgboost'
+
+
+
+
+logging.basicConfig(
+    # format='%(funcName).10s %(message)s',
+    level=logging.INFO,
+)
+
+logger = logging.getLogger()

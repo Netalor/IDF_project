@@ -2,35 +2,36 @@
 import plotly.graph_objects as go
 import shap
 import plotly.graph_objects as go
+from matplotlib import pyplot as plt
 from plotly.subplots import make_subplots
 from confs.conf import *
 
 color_scheme = {"1": "#6473ff", "0": "#217883"}
 
 
-def create_model_plots(df, feature_plots, desc=''):
-    for feature_plot in feature_plots:
-        print(feature_plot)
-        fig = go.Figure()
-        for card_name, card_df in df.groupby("target"):
-            print(card_name)
-            fig.add_trace(
-                go.Histogram(
-                    x=card_df[feature_plot],
-                    name=card_name,
-                    marker_color=color_scheme.get(1)
-                )
-            )
-        # Overlay both histograms
-        fig.update_layout(
-            barmode='overlay',
-            title_text=f"{desc} {feature_plot.replace('_', ' ')}",
-        )
-        # Reduce opacity to see both histograms
-        fig.update_traces(opacity=0.75)
-        fig.write_image(f"output/{folder_name}/analytics/{feature_plot}_histogram.png")
-        if show_plot:
-            fig.show()
+# def create_model_plots(df, feature_plots, desc=''):
+#     for feature_plot in feature_plots:
+#         logger.info(feature_plot)
+#         fig = go.Figure()
+#         for card_name, card_df in df.groupby("target"):
+#             logger.info(card_name)
+#             fig.add_trace(
+#                 go.Histogram(
+#                     x=card_df[feature_plot],
+#                     name=card_name,
+#                     marker_color=color_scheme.get(1)
+#                 )
+#             )
+#         # Overlay both histograms
+#         fig.update_layout(
+#             barmode='overlay',
+#             title_text=f"{desc} {feature_plot.replace('_', ' ')}",
+#         )
+#         # Reduce opacity to see both histograms
+#         fig.update_traces(opacity=0.75)
+#         fig.write_image(f"output/{folder_name}/analytics/{feature_plot}_histogram.png")
+#         if show_plot:
+#             fig.show()
 
 
 
@@ -52,8 +53,11 @@ def get_favorite_job(manila_data, desc=''):
 
 def statistic_plot(manila_data):
     agg_student_statistic = manila_data.T.describe().T
-    agg_student_statistic['mean'].hist()
-    manila_data.apply(lambda x: x.mean(), axis=0).hist()
+    agg_student_statistic.to_csv(f"output/{folder_name}/analytics/agg_student_statistic.csv")
+    # agg_student_statistic['mean'].hist()
+    # plt.savefig(f"output/{folder_name}/analytics/mean.png")
+    # manila_data.apply(lambda x: x.mean(), axis=0).hist()
+    # plt.savefig(f"output/{folder_name}/analytics/mean.png")
 
 
 def plot_hist(x0, x1, col):
@@ -82,7 +86,7 @@ def plot_smd(smd_scores, cols=["smd_global", "smd"], diff_name='smd'):
         show_legend = True if row == 1 else False
         fig.add_trace(
             go.Scatter(
-                x=smd_scores.loc[feature, cols],#,["mean_difference_global", "mean_difference"]],   #["smd_global", "smd"]
+                x=smd_scores.loc[feature, cols], #,["mean_difference_global", "mean_difference"]],   #["smd_global", "smd"]
                 y=[feature, feature],
                 mode='lines+markers',
                 showlegend=show_legend,

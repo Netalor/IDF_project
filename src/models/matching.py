@@ -2,6 +2,7 @@ from numpy import sqrt, absolute
 from tqdm import tqdm
 from pandas import DataFrame, Series
 
+from confs.conf import logger
 from confs.conf_mihshuv import target_feature
 
 
@@ -18,7 +19,7 @@ def create_matched_df(df):
         df_balanced = df_balanced.append(
             df_score.groupby(target_feature).sample(same_score_cnt),
         )
-    print(
+    logger.info(
         "balanced df shape\n",
         df_balanced.groupby("target")["propensity_score_round"].count()
     )

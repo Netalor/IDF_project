@@ -3,6 +3,8 @@ import pandas as pd
 import scipy.stats as stats
 import numpy as np
 
+from confs.conf import logger
+
 
 def calc_standardization(treated_metric, untreated_metric) -> float:
     return sqrt(
@@ -21,7 +23,7 @@ def numerical_summary(numeric_attributes: object, with_treatment_matched: object
     ])
 
     for attribute in numeric_attributes:
-        print(f"Describe: {attribute}")
+        logger.info(f"Describe: {attribute}")
 
         ks_statistic, p_value = stats.ks_2samp(with_treatment_matched[attribute], without_treatment_matched[attribute])
         treated_metric = with_treatment_matched[attribute]
@@ -88,20 +90,20 @@ def categorical_summary(categorical_attributes, with_treatment_matched, without_
     ])
 
     for attribute in categorical_attributes:
-        print(f"Describe: {attribute}")
+        logger.info(f"Describe: {attribute}")
         # Perform the Chi-squared test
-        chi2_stat, p_value = chi2_test(np.array(with_treatment_matched[attribute].astype(str)), np.array(without_treatment_matched[attribute].astype(str)))
+        chi2_squared_statistic, chi2_squared_p_value = chi2_test(np.array(with_treatment_matched[attribute].astype(str)), np.array(without_treatment_matched[attribute].astype(str)))
 
-        print("Chi-squared statistic:", chi2_stat)
-        print("P-value:", p_value)
+        logger.info(f" {chi2_squared_statistic = }")
+        logger.info(f"{chi2_squared_p_value = }")
 
         attributes_scores = attributes_scores.append({
             'attribute': attribute,
             **{f'{key}_high': value for key, value in with_treatment_matched[attribute].describe().to_dict().items()},
             **{f'{key}_low': value for key, value in without_treatment_matched[attribute].describe().to_dict().items()},
-            'chi2': chi2_stat,
-            'p_value': p_value
+            'chi2': chi2_squared_statistic,
+            'p_value': chi2_squared_p_value
         }, ignore_index=True)
-    print('\n'.join([f'{metric} : {score}' for metric, score in attributes_scores.items()]))
+    logger.info('\n'.join([f'{metric} : {score}' for metric, score in attributes_scores.items()]))
 
     return attributes_scores.sort_values(by='p_value', ascending=False).round(2)
