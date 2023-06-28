@@ -76,6 +76,7 @@ def load_manila_data(path):
     # adding target variable
     manila_data['original_target'] = com_data[target_name]
     manila_data['target'] = com_data[target_name].apply(classify)
+
     # separate manila cols and other
     hebrew_cols = manila_data.filter(regex="[\u0590-\u05FF\uFB1D-\uFB4F]+").columns.to_list()
     return manila_data, com_data, hebrew_cols
@@ -116,9 +117,7 @@ def filter_df_by_target_cond(df: pd.DataFrame, name):
     logger.info(name)
     # y = 'אשכול תפקידי מקצועות המחשב_חיילת מקצועות המחשוב'
     if name == 'mihshuv':
-        filtered_data = df[(df['profil'] >= 45) &
-                           (((df['mea_svivat_afaala'] >= 3) & (df['mea_svivat_ibud'] >= 4))
-                            | ((df['mea_svivat_afaala'] >= 4) & (df['mea_svivat_ibud'] >= 3)))]
+        filtered_data = df[(df['profil'] >= 25) & ((df['mea_svivat_afaala'] >= 3) | (df['mea_svivat_ibud'] >= 3))]
 
     # y = 'אשכול תפקידי מקצועות המחשב_חיילת מקצועות התקשוב'
     elif name == 'tikshuv':
@@ -141,7 +140,11 @@ def filter_df_by_target_cond(df: pd.DataFrame, name):
     print(filtered_data.shape)
     agg = filtered_data.groupby(['original_target', 'target'], as_index=False).agg(
         total=('original_target', 'count'))
+    filtered_data.groupby(['target'], as_index=False).agg(
+        total=('target', 'count')).to_csv(f'output/{folder_name}/analytics/target_agg.csv')
+
     fig = px.bar(agg, x="original_target", y='total')
+    fig.update_layout(title_text=f"histogram for {folder_name} ")
     fig.write_image(f"output/{folder_name}/analytics/target_mean.png")
     # filtered_data['original_target'].fillna(0).hist()
     # plt.savefig(f"output/{folder_name}/analytics/target_mean.png")

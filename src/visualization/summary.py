@@ -18,8 +18,16 @@ def calc_standardization(treated_metric, untreated_metric) -> float:
 def numerical_summary(numeric_attributes: object, with_treatment_matched: object, without_treatment_matched: object, df: object) -> object:
 
     attributes_scores = pd.DataFrame(columns=[
-        'attribute', 'count_high', 'mean_high', 'std_high', 'min_high', '25%_high', '50%_high', '75%_high', 'max_high',
-        'count_low', 'mean_low', 'std_low', 'min_low', '25%_low', '50%_low', '75%_low', 'max_low', 'ks_statistic', 'p_value'
+        'attribute',
+        'count_high', 'count_low',
+        'mean_high', 'mean_low',
+        'std_high', 'std_low',
+        'min_high', 'min_low',
+        '25%_high',  '25%_low',
+        '50%_high', '50%_low',
+        '75%_high', '75%_low',
+        'max_high', 'max_low',
+        'ks_statistic', 'p_value'
     ])
 
     for attribute in numeric_attributes:
@@ -86,7 +94,12 @@ def chi2_test(data1, data2):
 
 def categorical_summary(categorical_attributes, with_treatment_matched, without_treatment_matched):
     attributes_scores = pd.DataFrame(columns=[
-        'attribute', 'count_high', 'unique_high', 'top_high', 'freq_high', 'count_low', 'unique_low', 'top_low', 'freq_low',  'chi2', 'p_value'
+        'attribute',
+        'count_high', 'count_low',
+        'unique_high', 'unique_low',
+        'top_high', 'top_low',
+        'freq_high', 'freq_low',
+        'chi2', 'p_value'
     ])
 
     for attribute in categorical_attributes:

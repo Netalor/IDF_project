@@ -61,9 +61,10 @@ def create_pipeline(X, y, cumulative_threshold=0.8):
         ('cat', categorical_transformer, categorical_features)
 
     ])
-
+    y_train_ratio = (y == 0).sum() / (y == 1).sum()
     if algo_name == 'xgboost':
         classifier = XGBClassifier(
+            scale_pos_weight=y_train_ratio,
             n_jobs=-1,
             eval_metric=["auc", "logloss"],
             verbose=1,
@@ -110,18 +111,18 @@ def get_model_components(pipeline):
     # Get the feature names after preprocessing
     numerical_feature_names = numerical_features  # Assuming numerical_features is a list of numerical feature names
     logger.info(f'numerical_feature_names len: {len(numerical_feature_names)}')
-
-    categorical_transformer = preprocessor.named_transformers_['cat']
-    categorical_feature_names = categorical_transformer.named_steps['encoder'].get_feature_names_out(
-        categorical_features)
-    logger.info(f'categorical_feature_names len: {len(categorical_feature_names)}')
+    if len(categorical_features) > 0:
+        categorical_transformer = preprocessor.named_transformers_['cat']
+        categorical_feature_names = categorical_transformer.named_steps['encoder'].get_feature_names_out(
+            categorical_features)
+        logger.info(f'categorical_feature_names len: {len(categorical_feature_names)}')
 
     all_feature_names = []
     # Concatenate numerical and categorical feature names
     all_feature_names.extend(numerical_feature_names)
     logger.info(len(all_feature_names))
-
-    all_feature_names.extend(categorical_feature_names)
+    if len(categorical_features) > 0:
+        all_feature_names.extend(categorical_feature_names)
     logger.info(f'all_feature_names len: {len(all_feature_names)}')
     logger.info(f'all_feature_names: {all_feature_names}')
     features = [i for j, i in enumerate(all_feature_names) if j not in correlation_selection.columns_to_drop_]

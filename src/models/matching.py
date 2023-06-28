@@ -24,7 +24,7 @@ def create_matched_df(df):
         df_balanced.groupby("target")["propensity_score_round"].count()
     )
 
-    df_balanced.loc[((df_balanced['propensity_score_round'] >= 0.3) & (df_balanced['propensity_score_round'] < 0.5)), :].pivot_table(index='propensity_score_round', columns=target_feature, aggfunc='count', values='napa_code')#[''].count()
+    # df_balanced.loc[((df_balanced['propensity_score_round'] >= 0.3) & (df_balanced['propensity_score_round'] < 0.5)), :].pivot_table(index='propensity_score_round', columns=target_feature, aggfunc='count', values='napa_code')#[''].count()
     return df_balanced
 
 

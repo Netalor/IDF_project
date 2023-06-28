@@ -33,8 +33,6 @@ color_scheme = {"1": "#6473ff", "0": "#217883"}
 #         if show_plot:
 #             fig.show()
 
-
-
 def get_favorite_job(manila_data, desc=''):
     # favorite_job = manila_data.idxmax(axis=1).rename('max_job').to_frame()
     # Find column names with maximum values for each row

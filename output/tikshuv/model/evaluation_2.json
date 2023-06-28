@@ -1,1 +1,1 @@
-{"threshold": 0.5, "auc": 0.774, "accuracy_score": 0.9082206035379813, "f1_score": 0.13359528487229863, "precision_score": 0.4, "recall_score": 0.08018867924528301}
+{"threshold": 0.5, "auc": 0.808, "accuracy_score": 0.6921956295525494, "f1_score": 0.30136986301369867, "precision_score": 0.18842291789722387, "recall_score": 0.7523584905660378}

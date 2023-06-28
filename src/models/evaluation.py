@@ -87,7 +87,7 @@ class Evaluation:
         title:         Title for the heatmap. Default is None.
         """
         cf = confusion_matrix(self.y, self.pred)
-        categories = ['Female', 'Male']
+        categories = ['0', '1']
         group_names = ['True Neg', 'False Pos', 'False Neg', 'True Pos']
         # CODE TO GENERATE TEXT INSIDE EACH SQUARE
         blanks = ['' for i in range(cf.size)]

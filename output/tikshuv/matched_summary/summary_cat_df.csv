@@ -1,2 +1,2 @@
-,attribute,count_high,unique_high,top_high,freq_high,count_low,unique_low,top_low,freq_low,chi2,p_value
-0,napa_code,550,23,9.0,78,550,21,4.0,91,25.85,0.26
+,attribute,count_high,count_low,unique_high,unique_low,top_high,top_low,freq_high,freq_low,chi2,p_value
+0,napa_code,1533,1533,25,26,4.0,4.0,232,227,28.08,0.35
